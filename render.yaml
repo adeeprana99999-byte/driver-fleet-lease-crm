@@ -1,6 +1,6 @@
-services:
+﻿services:
   - type: web
-    name: driver-fleet-box
+    name: driver-fleet-lease-crm
     runtime: node
     plan: free
     buildCommand: npm ci
@@ -27,3 +27,4 @@ services:
         sync: false
       - key: RAZORPAY_WEBHOOK_SECRET
         sync: false
+
