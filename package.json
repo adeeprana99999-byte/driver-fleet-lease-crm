@@ -1,0 +1,19 @@
+{
+  "name": "driver-fleet-box",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Refined multi-vendor driver and fleet management app with vehicles, drivers, trips, expenses, maintenance, approvals, reports, and MongoDB Atlas storage.",
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "check": "node --check app.js && node --check server.js && node --check mongo-store.js && node --check file-store.js && node --check state-migration.js && node --check scripts/migrate-leasing-crm.js && node --check scripts/migrate-sqlite-to-mongodb.js",
+    "db:migrate-leasing": "node --no-warnings scripts/migrate-leasing-crm.js",
+    "db:migrate-leasing:dry": "node --no-warnings scripts/migrate-leasing-crm.js --dry-run",
+    "payments:test": "powershell -ExecutionPolicy Bypass -File scripts/configure-test-payments.ps1",
+    "payments:configure": "powershell -ExecutionPolicy Bypass -File scripts/configure-razorpay.ps1",
+    "migrate:sqlite": "node --no-warnings scripts/migrate-sqlite-to-mongodb.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "mongodb": "^7.0.0"
+  }
+}
