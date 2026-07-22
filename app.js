@@ -1817,14 +1817,12 @@
         document.querySelector('[name=password]').value = parts[1];
       });
     });
-    document.getElementById('login-form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      var data = Object.fromEntries(new FormData(event.currentTarget).entries());
-      var login = String(data.email || '').trim().toLowerCase();
-      var password = String(data.password || '').trim().toLowerCase();
+    function authenticateUser(login, password) {
       var loginAliases = {
         fleetadmin: 'owner@driverfleet.com',
         platformadmin: 'owner@driverfleet.com',
+        nri: 'nricarrentals@gmail.com',
+        nricarrentals: 'nricarrentals@gmail.com',
         northstaradmin: 'admin@northstar.com',
         bluerouteadmin: 'admin@blueroute.com',
         riverbendadmin: 'admin@blueroute.com',
@@ -1834,30 +1832,64 @@
       };
       var passwordAliases = {
         'owner@driverfleet.com': ['owner123', 'fleetadmin123'],
+        'nricarrentals@gmail.com': ['admin123'],
         'admin@northstar.com': ['admin123'],
         'admin@blueroute.com': ['admin123'],
         'driver@northstar.com': ['driver123']
       };
       var resolvedLogin = loginAliases[login] || login;
-      var user = state.users.find(function (item) {
+      return state.users.find(function (item) {
         var itemEmail = String(item.email || '').toLowerCase();
         var itemUsername = String(item.username || '').toLowerCase();
         var allowedPasswords = passwordAliases[itemEmail] || passwordAliases[itemUsername] || [String(item.password || '').toLowerCase()];
         return item.active && (itemEmail === resolvedLogin || itemUsername === resolvedLogin) && allowedPasswords.indexOf(password) >= 0;
       });
-      if (!user) {
-        document.getElementById('login-error').textContent = 'Email, username, or password is not correct.';
-        return;
-      }
+    }
+
+    function finishLogin(user) {
+      var errorNode = document.getElementById('login-error');
       var vendor = user.vendorId ? vendorById(user.vendorId) : null;
       if (vendor && vendor.status !== 'active') {
-        document.getElementById('login-error').textContent = 'This company account is currently suspended.';
+        if (errorNode) errorNode.textContent = 'This company account is currently suspended.';
         return;
       }
       sessionStorage.setItem('driver_fleet_user', user.id);
       ui.module = 'dashboard';
       ui.notice = '';
       render();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = Object.fromEntries(new FormData(event.currentTarget).entries());
+      var login = String(data.email || '').trim().toLowerCase();
+      var password = String(data.password || '').trim().toLowerCase();
+      var user = authenticateUser(login, password);
+      var errorNode = document.getElementById('login-error');
+      if (!user) {
+        if (errorNode) errorNode.textContent = 'Checking the latest account data...';
+        fetch('/api/state')
+          .then(function (response) { return response.json(); })
+          .then(function (payload) {
+            if (payload && payload.state) {
+              state = normaliseState(payload.state);
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) {}
+            }
+            var refreshedUser = authenticateUser(login, password);
+            if (!refreshedUser) {
+              var refreshedErrorNode = document.getElementById('login-error');
+              if (refreshedErrorNode) refreshedErrorNode.textContent = 'Email, username, or password is not correct.';
+              return;
+            }
+            finishLogin(refreshedUser);
+          })
+          .catch(function () {
+            var refreshedErrorNode = document.getElementById('login-error');
+            if (refreshedErrorNode) refreshedErrorNode.textContent = 'Email, username, or password is not correct.';
+          });
+        return;
+      }
+      finishLogin(user);
     });
   }
 
