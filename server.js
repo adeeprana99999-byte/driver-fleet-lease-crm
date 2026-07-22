@@ -14,6 +14,7 @@ const root = __dirname;
 const port = Number(process.env.PORT || 4330);
 const maxBodyBytes = 80 * 1024 * 1024;
 const useMongo = Boolean(process.env.MONGODB_URI);
+const enableBasicAuth = ["1", "true", "yes"].includes(String(process.env.ENABLE_BASIC_AUTH || "").trim().toLowerCase());
 const store = useMongo
   ? new MongoStore({ uri: process.env.MONGODB_URI, dbName: process.env.MONGODB_DB })
   : new FileStore({ filePath: path.join(root, "data", "local-state.json") });
@@ -43,6 +44,7 @@ function isPublicRequest(pathname) {
 
 function authorizeRequest(req, res, pathname) {
   if (pathname === "/api/health") return true;
+  if (!enableBasicAuth) return true;
   const expectedUser = process.env.APP_ACCESS_USER;
   const expectedPassword = process.env.APP_ACCESS_PASSWORD;
   if (!expectedUser && !expectedPassword) return true;
@@ -701,10 +703,12 @@ const server = http.createServer(async (req, res) => {
 });
 
 async function start() {
-  const hasAccessUser = Boolean(process.env.APP_ACCESS_USER);
-  const hasAccessPassword = Boolean(process.env.APP_ACCESS_PASSWORD);
-  if (hasAccessUser !== hasAccessPassword) {
-    throw new Error("APP_ACCESS_USER and APP_ACCESS_PASSWORD must be configured together.");
+  if (enableBasicAuth) {
+    const hasAccessUser = Boolean(process.env.APP_ACCESS_USER);
+    const hasAccessPassword = Boolean(process.env.APP_ACCESS_PASSWORD);
+    if (hasAccessUser !== hasAccessPassword) {
+      throw new Error("APP_ACCESS_USER and APP_ACCESS_PASSWORD must be configured together.");
+    }
   }
   await store.connect();
   server.listen(port, "0.0.0.0", () => {

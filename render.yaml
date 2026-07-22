@@ -11,10 +11,6 @@
         sync: false
       - key: MONGODB_DB
         value: fleetwebco
-      - key: APP_ACCESS_USER
-        sync: false
-      - key: APP_ACCESS_PASSWORD
-        sync: false
       - key: PAYMENT_MODE
         value: test
       - key: BOOKING_DEPOSIT_AMOUNT
