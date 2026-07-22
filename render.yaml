@@ -1,4 +1,4 @@
-﻿services:
+services:
   - type: web
     name: driver-fleet-lease-crm
     runtime: node
@@ -23,4 +23,3 @@
         sync: false
       - key: RAZORPAY_WEBHOOK_SECRET
         sync: false
-

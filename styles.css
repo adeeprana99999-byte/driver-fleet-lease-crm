@@ -52,7 +52,11 @@ a { color: inherit; text-decoration: none; }
 }
 .sidebar nav button:hover { color: #fff; background: rgba(255,255,255,.08); transform: translateX(2px); }
 .sidebar nav button.active { color: #fff; background: rgba(255,255,255,.13); box-shadow: inset 3px 0 var(--accent); }
-.nav-icon { width: 25px; height: 25px; display: inline-grid; place-items: center; font-size: 17px; font-weight: 500; }
+.nav-icon {
+  width: 27px; height: 27px; display: inline-grid; place-items: center; border-radius: 9px;
+  background: rgba(255,255,255,.09); color: currentColor; font-size: 8px; font-weight: 900;
+  letter-spacing: .04em; text-transform: uppercase;
+}
 .sidebar-support {
   margin: auto 4px 18px; padding: 15px; border-radius: 14px; background: rgba(255,255,255,.07);
   border: 1px solid rgba(255,255,255,.09);
@@ -123,15 +127,17 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 7px 22px rgba(20, 42, 70, .035); cursor: pointer; text-align: center; transition: .18s ease;
 }
 .module-box:hover { transform: translateY(-3px); border-color: #b7cee0; box-shadow: 0 14px 32px rgba(20, 42, 70, .09); }
-.module-box-icon { width: 62px; height: 62px; display: grid; place-items: center; margin-bottom: 3px; border-radius: 50%; color: #3d5c75; background: #eaf2fb; }
-.module-box-icon .nav-icon { width: auto; height: auto; font-size: 24px; }
+.module-box-icon { width: 62px; height: 62px; display: grid; place-items: center; margin-bottom: 3px; border-radius: 18px; color: #3d5c75; background: #eaf2fb; }
+.module-box-icon .nav-icon { width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,.66); font-size: 11px; }
 .module-box b { font-size: 15px; letter-spacing: -.02em; }
 .module-box small { min-height: 28px; color: var(--muted); font-size: 9px; line-height: 1.45; }
 .module-box em { color: var(--brand-2); font-size: 8px; font-style: normal; font-weight: 850; text-transform: uppercase; letter-spacing: .06em; }
 .module-trips .module-box-icon { color: #6650d8; background: #eeeaff; }
 .module-expenses .module-box-icon { color: #e56d2d; background: #fff0e5; }
 .module-maintenance .module-box-icon { color: #0c9b8b; background: #e6faf7; }
-.module-fleet .module-box-icon { color: #1677c8; background: #e8f4ff; }
+.module-bookings .module-box-icon { color: #1d6faa; background: #eaf4fc; }
+.module-leases .module-box-icon { color: #0d8255; background: #eaf8f2; }
+.module-vehicles .module-box-icon { color: #1677c8; background: #e8f4ff; }
 .module-drivers .module-box-icon { color: #a64e98; background: #faeefa; }
 .module-vendors .module-box-icon { color: #d1970a; background: #fff6d8; }
 .module-reports .module-box-icon { color: #348a52; background: #e9f8ee; }
@@ -202,6 +208,25 @@ a { color: inherit; text-decoration: none; }
 .btn-danger-soft { background: #fff1f2; color: var(--danger); border-color: #ffd5da; }
 .btn-wide { width: 100%; min-height: 46px; }
 .link-btn { border: 0; background: transparent; color: var(--brand-2); font-size: 10px; font-weight: 800; cursor: pointer; }
+.table-link { display: inline-grid; gap: 2px; padding: 0; border: 0; background: transparent; color: var(--brand-2); text-align: left; cursor: pointer; font: inherit; }
+.table-link b, .table-link small { display: block; }
+.table-link small { color: var(--muted); }
+.table-link:hover b { text-decoration: underline; }
+.rent-lessee-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 13px 14px; }
+.rent-lessee-card {
+  min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 10px; align-items: center;
+  padding: 12px; border: 1px solid #dbe5ed; border-radius: 10px; background: #fff; color: var(--text);
+  cursor: pointer; text-align: left; transition: .18s ease;
+}
+.rent-lessee-card:hover, .rent-lessee-card.active { border-color: #9fc2dc; background: #f2f8fc; box-shadow: 0 8px 22px rgba(20,42,70,.08); }
+.rent-lessee-card b, .rent-lessee-card small, .rent-lessee-card em, .rent-lessee-card strong { display: block; }
+.rent-lessee-card b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.rent-lessee-card small { margin-top: 3px; color: var(--muted); font-size: 8px; }
+.rent-lessee-card strong { font-size: 14px; }
+.rent-lessee-card em { grid-column: 1 / -1; color: #6b7f91; font-size: 8px; font-style: normal; font-weight: 800; }
+.rent-selected-head { padding: 2px 14px 12px; }
+.rent-selected-head h3 { margin: 3px 0 2px; font-size: 14px; }
+.rent-selected-head p { margin: 0; color: var(--muted); font-size: 9px; }
 .mini-btn {
   min-height: 28px; display: inline-flex; align-items: center; justify-content: center; padding: 5px 9px;
   border: 1px solid #dbe5ed; border-radius: 8px; color: #3c586f; background: #f7f9fb; cursor: pointer; font-size: 9px; font-weight: 800;
@@ -221,7 +246,7 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; gap: 14px; min-height: 112px; padding: 20px; border-radius: var(--radius);
   background: var(--panel); border: 1px solid #e5ecf2; box-shadow: 0 6px 22px rgba(20,42,70,.045);
 }
-.kpi-icon { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 13px; background: #eaf2fb; color: #1a68ad; font-weight: 900; }
+.kpi-icon { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 13px; background: #eaf2fb; color: #1a68ad; font-size: 10px; font-weight: 900; letter-spacing: .04em; }
 .kpi.teal .kpi-icon { background: #e9faf7; color: #07917f; }
 .kpi.amber .kpi-icon { background: #fff6e6; color: #d38400; }
 .kpi.green .kpi-icon { background: #eaf9f3; color: var(--success); }
@@ -429,6 +454,7 @@ input[type="color"] { padding: 4px; }
 .readonly-note { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 11px 13px; border: 1px solid #cfe2f1; border-radius: 11px; color: #315c7d; background: #eef7fc; }
 .readonly-note b { font-size: 9px; white-space: nowrap; }
 .readonly-note span { color: #55758e; font-size: 9px; }
+.table-panel .rent-help { margin: 13px 14px 0; }
 .detail-lines { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 20px; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--line); }
 .detail-lines > div { min-height: 72px; padding: 14px; background: #fff; }
 .detail-lines span, .detail-lines b { display: block; }
@@ -615,7 +641,7 @@ input[type="color"] { padding: 4px; }
 .story-grid span { margin-top: 4px; color: rgba(255,255,255,.55); font-size: 8px; }
 .road-art { position: relative; z-index: 1; height: 34px; margin-top: auto; opacity: .56; }
 .road-art i { position: absolute; left: 0; right: 0; top: 16px; border-top: 1px dashed rgba(255,255,255,.45); }
-.road-art span { position: absolute; top: 10px; color: var(--accent); font-size: 12px; }
+.road-art span { position: absolute; top: 11px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .road-art span:nth-child(2) { left: 16%; } .road-art span:nth-child(3) { left: 52%; } .road-art span:nth-child(4) { right: 10%; }
 .login-card-wrap { min-height: 100vh; display: grid; place-items: center; padding: 40px; background: #f7f9fb; }
 .login-card { width: min(410px, 100%); padding: 38px; border-radius: 22px; background: #fff; border: 1px solid #e2e9ef; box-shadow: 0 22px 60px rgba(24,45,72,.11); }
@@ -637,6 +663,7 @@ input[type="color"] { padding: 4px; }
   .module-box-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rent-lessee-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vendor-grid, .driver-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -653,7 +680,7 @@ input[type="color"] { padding: 4px; }
   }
   .mobile-nav button { min-width: 52px; display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; color: #7a8997; cursor: pointer; }
   .mobile-nav button.active { color: var(--brand-2); }
-  .mobile-nav .nav-icon { height: 24px; font-size: 17px; }
+  .mobile-nav .nav-icon { width: 27px; height: 24px; font-size: 7px; }
   .mobile-nav small { font-size: 7px; }
   .module-box-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
   .driver-status-grid { grid-template-columns: 1fr; }
@@ -684,7 +711,7 @@ input[type="color"] { padding: 4px; }
   .module-box-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .module-box { min-height: 160px; padding: 17px 10px 13px; border-radius: 15px; }
   .module-box-icon { width: 54px; height: 54px; }
-  .module-box-icon .nav-icon { font-size: 21px; }
+  .module-box-icon .nav-icon { width: 40px; height: 40px; font-size: 10px; }
   .module-box b { font-size: 13px; }
   .module-box small { min-height: 38px; font-size: 8px; }
   .driver-welcome { padding: 18px 16px; border-radius: 18px; }
@@ -743,6 +770,7 @@ input[type="color"] { padding: 4px; }
   .booking-panel-head { flex-direction: column; }
   .booking-pay-ready, .booking-pay-warning { max-width: none; width: 100%; }
   .booking-form .form-grid { grid-template-columns: 1fr; }
+  .rent-lessee-list { grid-template-columns: 1fr; }
   .detail-lines { grid-template-columns: 1fr 1fr; }
   .detail-profile { align-items: flex-start; }
   .readonly-note { align-items: flex-start; flex-direction: column; gap: 3px; }
@@ -754,4 +782,25 @@ input[type="color"] { padding: 4px; }
   .app-shell { display: block; }
   .page { padding: 0; }
   .panel, .kpi { box-shadow: none; break-inside: avoid; }
+}
+
+
+.report-kpi {
+  width: 100%;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.report-kpi.active {
+  border-color: rgba(11,107,203,.42);
+  box-shadow: 0 12px 34px rgba(11,107,203,.15);
+}
+
+.report-detail-panel .panel-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
 }
