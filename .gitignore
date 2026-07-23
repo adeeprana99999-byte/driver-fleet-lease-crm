@@ -1,0 +1,12 @@
+data/*.sqlite
+data/*.sqlite-*
+data/local-state.json
+.env
+.env.*
+!.env.example
+node_modules/
+.npm-cache/
+*.log
+.DS_Store
+Thumbs.db
+*.bak

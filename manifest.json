@@ -1,0 +1,9 @@
+{
+  "name": "Driver Fleet",
+  "short_name": "DriverFleet",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0b3558",
+  "description": "Multi-vendor driver and fleet operations app"
+}
